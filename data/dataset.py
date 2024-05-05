@@ -1,8 +1,10 @@
-from torch.utils.data import Dataset
 import os
 import tifffile as tiff
-import numpy as np
+
 import torch
+from torch.utils.data import Dataset
+import numpy as np
+
 
 class Sen2_MTC(Dataset):
     def __init__(self, root, mode='train'):
@@ -44,7 +46,11 @@ class Sen2_MTC(Dataset):
         image_cloud2 = self.image_read(cloud_image_path2)
         image_cloudless = self.image_read(cloudless_image_path)
 
-        return [image_cloud0, image_cloud1, image_cloud2], image_cloudless, self.image_name[index]
+        data = {}
+        data['cloud_free'] = image_cloudless[:3, :, :]
+        data['cloudy_images'] = (image_cloud0[:3, :, :], image_cloud1[:3, :, :], image_cloud2[:3, :, :])
+        data['path'] = self.image_name[index]+".png"
+        return data
         
     def __len__(self):
         return len(self.filepair)
