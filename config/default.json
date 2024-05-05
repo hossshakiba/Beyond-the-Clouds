@@ -1,0 +1,86 @@
+{
+    "name": "deault",
+    "batch": 16,
+    "device": "cpu",
+    "n_epoch": 1,
+    "lr": 1e-3,
+    "datasets": {
+        "train": {
+            "which_dataset": {
+                "name": [
+                    "data.dataset",
+                    "Sen2_MTC_New_Multi"
+                ],
+                "args": {
+                    "data_root": "/Users/sinaraoufi/Desktop/Paper/Cloud_Removal/datasets/CTGAN/Sen2_MTC/dataset",
+                    "mode": "train"
+                }
+            },
+            "dataloader": {
+                "args": {
+                    "batch_size": 8,
+                    "num_workers": 8,
+                    "shuffle": true,
+                    "pin_memory": true,
+                    "drop_last": true
+                },
+                "val_args": {
+                    "batch_size": 1,
+                    "num_workers": 4,
+                    "shuffle": false,
+                    "pin_memory": true,
+                    "drop_last": false
+                }
+            }
+        },
+        "val": {
+            "which_dataset": {
+                "name": "Sen2_MTC_New_Multi",
+                "args": {
+                    "data_root": "",
+                    "mode": "val"
+                }
+            }
+        },
+        "test": {
+            "which_dataset": {
+                "name": "Sen2_MTC_New_Multi",
+                "args": {
+                    "data_root": "",
+                    "mode": "test"
+                }
+            },
+            "dataloader": {
+                "args": {
+                    "batch_size": 1,
+                    "num_workers": 4
+                }
+            }
+        }
+    },
+    "model": {
+        "which_model": {
+            "name": [
+                "models.model",
+                "Model"
+            ],
+            "args": {}
+        },
+        "which_networks": [
+            {
+                "name": [
+                    "models.network",
+                    "VAE"
+                ],
+                "args": {}
+            }
+        ],
+        "which_losses": [],
+        "which_metrics": []
+    },
+    "train": {
+        "n_epoch": 1
+    },
+    "test": {
+    }
+}
