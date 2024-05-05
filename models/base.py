@@ -1,4 +1,7 @@
+import os
 from abc import abstractmethod
+
+import torch
 
 
 class BaseModel():
@@ -11,6 +14,8 @@ class BaseModel():
         self.epoch = config['n_epoch']
         self.lr = config['lr']
         self.train_dataloader = train_dataloader
+        self.model_path = config['train']['model_path']
+        self.model_name = config['train']['model_name']
         # self.val_dataloader = val_dataloader
         # self.metrics = metrics
         # self.schedulers = []
@@ -35,5 +40,8 @@ class BaseModel():
     def test_step(self):
         pass
 
-    def save_model(self, model, path):
-        pass
+    def save_model(self, model):
+        """  Saves the model's state dictionary. """
+        os.makedirs(os.path.dirname(self.model_path), exist_ok=True)
+        path = os.path.join(self.model_path, self.model_name)
+        torch.save(model.state_dict(), path)

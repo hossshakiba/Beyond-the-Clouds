@@ -79,7 +79,8 @@
         "which_metrics": []
     },
     "train": {
-        "n_epoch": 1
+        "model_path": "saved_models/",
+        "model_name": "saved_model.pt"
     },
     "test": {
     }

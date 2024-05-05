@@ -47,4 +47,5 @@ class Model(BaseModel):
 
                 dataloader_iter.set_postfix({'loss': loss.item()})
 
-            print("\tEpoch", epoch + 1,"\tAverage Loss: ", overall_loss / (i*self.batch_size))
+            print(f"Epoch {epoch + 1}, Average Loss: {overall_loss / (i*self.batch_size)}")
+        self.save_model(self.network)
