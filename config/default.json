@@ -1,8 +1,8 @@
 {
     "name": "deault",
     "batch": 16,
-    "device": "cpu",
-    "n_epoch": 1,
+    "device": "cuda",
+    "n_epoch": 20,
     "lr": 1e-3,
     "datasets": {
         "train": {
@@ -12,7 +12,7 @@
                     "Sen2_MTC_New_Multi"
                 ],
                 "args": {
-                    "data_root": "/Users/sinaraoufi/Desktop/Paper/Cloud_Removal/datasets/CTGAN/Sen2_MTC/dataset",
+                    "data_root": "/home/geo/Desktop/datasets/CTGAN/CTGAN/Sen2_MTC/dataset",
                     "mode": "train"
                 }
             },

@@ -5,7 +5,7 @@ import torch
 
 
 class BaseModel():
-    def __init__(self, config, train_dataloader):
+    def __init__(self, config, dataloader):
         """ init model with basic input, which are from __init__(**kwargs) function in inherited class """
         self.config = config
         self.phase = config['phase']
@@ -13,10 +13,9 @@ class BaseModel():
         self.batch_size = self.config['datasets'][self.phase]['dataloader']['args']['batch_size']
         self.epoch = config['n_epoch']
         self.lr = config['lr']
-        self.train_dataloader = train_dataloader
+        self.dataloader = dataloader
         self.model_path = config['train']['model_path']
         self.model_name = config['train']['model_name']
-        # self.val_dataloader = val_dataloader
         # self.metrics = metrics
         # self.schedulers = []
         # self.optimizers = []
@@ -26,7 +25,7 @@ class BaseModel():
         self.train_step()
 
     def test(self):
-        pass
+        self.test_step()
 
     @abstractmethod
     def train_step(self):

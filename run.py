@@ -14,7 +14,7 @@ def main(config):
 
     model = create_model(config=config,
                          network=network,
-                         train_dataloader=dataloader
+                         dataloader=dataloader
                         )
 
     if config['phase'] == 'train':

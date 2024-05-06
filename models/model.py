@@ -1,6 +1,9 @@
+import os
+
 import torch
 import torch.nn as nn
 from torch.optim import Adam
+
 from tqdm import tqdm
 
 from models.base import BaseModel
@@ -31,7 +34,7 @@ class Model(BaseModel):
     def train_step(self):
         for epoch in range(self.epoch):
             overall_loss = 0
-            dataloader_iter = tqdm(enumerate(self.train_dataloader), desc=f'Training... Epoch: {epoch + 1}/{self.epoch}', total=len(self.train_dataloader))
+            dataloader_iter = tqdm(enumerate(self.dataloader), desc=f'Training... Epoch: {epoch + 1}/{self.epoch}', total=len(self.dataloader))
             for i, train_data in dataloader_iter:
                 self.set_input(train_data)
 
@@ -49,3 +52,17 @@ class Model(BaseModel):
 
             print(f"Epoch {epoch + 1}, Average Loss: {overall_loss / (i*self.batch_size)}")
         self.save_model(self.network)
+    
+    def test_step(self):
+        path = os.path.join(self.model_path, self.model_name)
+        self.network.load_state_dict(torch.load(path))
+        self.network.eval()
+        overall_loss = 0
+        dataloader_iter = tqdm(enumerate(self.dataloader), desc=f'Testing...', total=len(self.dataloader))
+        for i, train_data in dataloader_iter:
+            self.set_input(train_data)
+            x_hat, mean, log_var = self.network(self.cloudy_images[0])
+            loss = self.loss_function(x_hat, self.cloud_free, mean, log_var)
+
+            overall_loss += loss.item()
+        print(f"Average Loss: {overall_loss / (len(self.dataloader))}")
