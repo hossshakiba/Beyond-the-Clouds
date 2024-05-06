@@ -44,6 +44,3 @@ class BaseModel():
         os.makedirs(os.path.dirname(self.model_path), exist_ok=True)
         path = os.path.join(self.model_path, self.model_name)
         torch.save(model.state_dict(), path)
-
-    def save_outputs(self):
-        pass

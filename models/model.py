@@ -1,17 +1,16 @@
 import os
 
-import numpy as np
-
-from data.utils import get_rgb
 import torch
 import torch.nn as nn
 from torch.optim import Adam
-from torchvision.utils import save_image
+from torchmetrics import PeakSignalNoiseRatio
+from torchmetrics.image import StructuralSimilarityIndexMeasure
 
 from tqdm import tqdm
 from PIL import Image
 
 from models.base import BaseModel
+from data.utils import get_rgb
 
 
 class Model(BaseModel):
@@ -62,15 +61,24 @@ class Model(BaseModel):
         path = os.path.join(self.model_path, self.model_name)
         self.network.load_state_dict(torch.load(path))
         self.network.eval()
-        overall_loss = 0
+
+        psnr = PeakSignalNoiseRatio().to(self.device)
+        ssim = StructuralSimilarityIndexMeasure().to(self.device)
+
         counter = 0
+        test_loss = 0.0
+        test_psnr = 0.0
+        test_ssim = 0.0
+
         dataloader_iter = tqdm(enumerate(self.dataloader), desc=f'Testing...', total=len(self.dataloader))
-        for _, train_data in dataloader_iter:
-            self.set_input(train_data)
+        for _, test_data in dataloader_iter:
+            self.set_input(test_data)
             x_hat, mean, log_var = self.network(self.cloudy_images[0])
             loss = self.loss_function(x_hat, self.cloud_free, mean, log_var)
 
-            overall_loss += loss.item()
+            test_loss += loss.item()
+            test_psnr += psnr(x_hat, self.cloud_free)
+            test_ssim += ssim(x_hat, self.cloud_free)
 
             for output_image, cloudy_image, cloud_free in zip(x_hat, self.cloudy_images[0], self.cloud_free):
                 output_image = get_rgb(output_image)
@@ -95,4 +103,8 @@ class Model(BaseModel):
                 cloud_free.save(gt_path)
                 counter += 1
 
-        print(f"Average Loss: {overall_loss / (len(self.dataloader))}")
+            test_loss = test_loss / len(self.dataloader)
+            test_psnr = test_psnr / len(self.dataloader)
+            test_ssim = test_ssim / len(self.dataloader)
+
+        print(f"Loss: {test_loss}, PSNR: {test_psnr}, SSIM: {test_ssim}")
