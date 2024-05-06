@@ -80,8 +80,10 @@
     },
     "train": {
         "model_path": "saved_models/",
-        "model_name": "saved_model.pt"
+        "model_name": "saved_model2.pt"
     },
     "test": {
+        "model_path": "saved_models/",
+        "model_name": "saved_model2.pt"
     }
 }

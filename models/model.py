@@ -1,10 +1,15 @@
 import os
 
+import numpy as np
+
+from data.utils import get_rgb
 import torch
 import torch.nn as nn
 from torch.optim import Adam
+from torchvision.utils import save_image
 
 from tqdm import tqdm
+from PIL import Image
 
 from models.base import BaseModel
 
@@ -58,11 +63,36 @@ class Model(BaseModel):
         self.network.load_state_dict(torch.load(path))
         self.network.eval()
         overall_loss = 0
+        counter = 0
         dataloader_iter = tqdm(enumerate(self.dataloader), desc=f'Testing...', total=len(self.dataloader))
-        for i, train_data in dataloader_iter:
+        for _, train_data in dataloader_iter:
             self.set_input(train_data)
             x_hat, mean, log_var = self.network(self.cloudy_images[0])
             loss = self.loss_function(x_hat, self.cloud_free, mean, log_var)
 
             overall_loss += loss.item()
+
+            for output_image, cloudy_image, cloud_free in zip(x_hat, self.cloudy_images[0], self.cloud_free):
+                output_image = get_rgb(output_image)
+                output_image = Image.fromarray(output_image)
+                cloudy_image = get_rgb(cloudy_image)
+                cloudy_image = Image.fromarray(cloudy_image)
+                cloud_free = get_rgb(cloud_free)
+                cloud_free = Image.fromarray(cloud_free)
+                
+                model_results_path = os.path.join("model_outputs", self.model_name.split('.')[0], "results")
+                os.makedirs(model_results_path, exist_ok=True)
+                os.makedirs(f"{model_results_path}/outputs", exist_ok=True)
+                os.makedirs(f"{model_results_path}/inputs", exist_ok=True)
+                os.makedirs(f"{model_results_path}/ground_truth", exist_ok=True)
+
+                output_path = os.path.join(f"{model_results_path}/outputs/{counter}.png")
+                input_path = os.path.join(f"{model_results_path}/inputs/{counter}.png")
+                gt_path = os.path.join(f"{model_results_path}/ground_truth/{counter}.png")
+
+                output_image.save(output_path)
+                cloudy_image.save(input_path)
+                cloud_free.save(gt_path)
+                counter += 1
+
         print(f"Average Loss: {overall_loss / (len(self.dataloader))}")

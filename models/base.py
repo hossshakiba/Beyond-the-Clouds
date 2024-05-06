@@ -14,8 +14,8 @@ class BaseModel():
         self.epoch = config['n_epoch']
         self.lr = config['lr']
         self.dataloader = dataloader
-        self.model_path = config['train']['model_path']
-        self.model_name = config['train']['model_name']
+        self.model_path = config[self.phase]['model_path']
+        self.model_name = config[self.phase]['model_name']
         # self.metrics = metrics
         # self.schedulers = []
         # self.optimizers = []
@@ -44,3 +44,6 @@ class BaseModel():
         os.makedirs(os.path.dirname(self.model_path), exist_ok=True)
         path = os.path.join(self.model_path, self.model_name)
         torch.save(model.state_dict(), path)
+
+    def save_outputs(self):
+        pass
