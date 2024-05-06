@@ -164,3 +164,7 @@ cython_debug/
 
 # OS
 .DS_Store
+
+# local
+saved_models/
+model_outputs/
