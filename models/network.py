@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from models.ViT import VisualTransformer
+from models.deepvit import DeepViT
 
 
 # --- Channel Attention (CA) Layer --- #
@@ -166,10 +167,22 @@ class Decoder(nn.Module):
 class VAE(nn.Module):
     def __init__(self):
         super().__init__()
-        self.encoder = VisualTransformer(image_width=256,
-                                         image_height=256,
-                                         patch_size=16,
-                                         num_dim=50)
+        # self.encoder = VisualTransformer(image_width=256,
+        #                                  image_height=256,
+        #                                  patch_size=16,
+        #                                  num_dim=50)
+        self.encoder = DeepViT(
+                        image_size = 256,
+                        patch_size = 32,
+                        num_classes = 512,
+                        dim = 1024,
+                        depth = 6,
+                        heads = 16,
+                        mlp_dim = 2048,
+                        dropout = 0.1,
+                        emb_dropout = 0.1,
+                        num_dim=50
+                    )
         self.decoder = Decoder()
          
     def en(self, x):
