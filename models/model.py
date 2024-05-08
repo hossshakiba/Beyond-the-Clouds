@@ -3,8 +3,7 @@ import os
 import torch
 import torch.nn as nn
 from torch.optim import Adam
-from torchmetrics import PeakSignalNoiseRatio
-from torchmetrics.image import StructuralSimilarityIndexMeasure
+from torcheval.metrics import PeakSignalNoiseRatio
 
 from tqdm import tqdm
 from PIL import Image
@@ -44,7 +43,7 @@ class Model(BaseModel):
 
                 self.optimizer.zero_grad()
 
-                x_hat, mean, log_var = self.network(self.cloudy_images[0])
+                x_hat, mean, log_var = self.network(self.cloudy_images[1])
                 loss = self.loss_function(x_hat, self.cloud_free, mean, log_var)
 
                 overall_loss += loss.item()
@@ -63,24 +62,21 @@ class Model(BaseModel):
         self.network.eval()
 
         psnr = PeakSignalNoiseRatio().to(self.device)
-        ssim = StructuralSimilarityIndexMeasure().to(self.device)
 
         counter = 0
         test_loss = 0.0
         test_psnr = 0.0
-        test_ssim = 0.0
 
         dataloader_iter = tqdm(enumerate(self.dataloader), desc=f'Testing...', total=len(self.dataloader))
         for _, test_data in dataloader_iter:
             self.set_input(test_data)
-            x_hat, mean, log_var = self.network(self.cloudy_images[0])
+            x_hat, mean, log_var = self.network(self.cloudy_images[1])
             loss = self.loss_function(x_hat, self.cloud_free, mean, log_var)
 
             test_loss += loss.item()
-            test_psnr += psnr(x_hat, self.cloud_free)
-            test_ssim += ssim(x_hat, self.cloud_free)
+            psnr.update(x_hat, self.cloud_free)
 
-            for output_image, cloudy_image, cloud_free in zip(x_hat, self.cloudy_images[0], self.cloud_free):
+            for output_image, cloudy_image, cloud_free in zip(x_hat, self.cloudy_images[1], self.cloud_free):
                 output_image = get_rgb(output_image)
                 output_image = Image.fromarray(output_image)
                 cloudy_image = get_rgb(cloudy_image)
@@ -104,7 +100,6 @@ class Model(BaseModel):
                 counter += 1
 
             test_loss = test_loss / len(self.dataloader)
-            test_psnr = test_psnr / len(self.dataloader)
-            test_ssim = test_ssim / len(self.dataloader)
+            test_psnr = psnr.compute()
 
-        print(f"Loss: {test_loss}, PSNR: {test_psnr}, SSIM: {test_ssim}")
+        print(f"Loss: {test_loss}, PSNR: {test_psnr}")
