@@ -75,7 +75,7 @@
                 "args": {}
             }
         ],
-        "which_losses": [],
+        "which_loss": "default",
         "which_metrics": []
     },
     "train": {

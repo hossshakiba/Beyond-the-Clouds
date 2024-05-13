@@ -4,6 +4,7 @@ import torch
 import torch.nn as nn
 from torch.optim import Adam
 from torcheval.metrics import PeakSignalNoiseRatio
+import torchvision.models as models
 
 from tqdm import tqdm
 from PIL import Image
@@ -27,12 +28,16 @@ class Model(BaseModel):
         self.path = data['path']
         self.batch_size = len(data['path'])
 
-    def loss_function(self, x, x_hat, mean, log_var):
+    def loss_function(self, x, x_hat, mean, log_var, loss_type):
         MSE = nn.MSELoss()
-        reproduction_loss = MSE(x_hat, x)
         KLD = - 0.5 * torch.sum(1 + log_var - mean.pow(2) - log_var.exp())
-
-        return reproduction_loss + KLD
+        if loss_type == "default":
+            reproduction_loss = MSE(x_hat, x)
+            return reproduction_loss + KLD
+        elif loss_type == "vgg":
+            vgg = models.vgg19(weights=models.VGG19_Weights.IMAGENET1K_V1).features[:16].to(self.device)
+            reproduction_loss = MSE(vgg(x_hat), vgg(x))
+            return reproduction_loss + KLD
 
     def train_step(self):
         for epoch in range(self.epoch):
@@ -44,7 +49,7 @@ class Model(BaseModel):
                 self.optimizer.zero_grad()
 
                 x_hat, mean, log_var = self.network(self.cloudy_images[1])
-                loss = self.loss_function(x_hat, self.cloud_free, mean, log_var)
+                loss = self.loss_function(x_hat, self.cloud_free, mean, log_var, self.loss_func)
 
                 overall_loss += loss.item()
 

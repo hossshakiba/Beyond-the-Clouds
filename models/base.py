@@ -16,6 +16,7 @@ class BaseModel():
         self.dataloader = dataloader
         self.model_path = config[self.phase]['model_path']
         self.model_name = config[self.phase]['model_name']
+        self.loss_func = config['model']['which_loss']
         # self.metrics = metrics
         # self.schedulers = []
         # self.optimizers = []
