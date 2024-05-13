@@ -31,13 +31,14 @@ class Model(BaseModel):
     def loss_function(self, x, x_hat, mean, log_var, loss_type):
         MSE = nn.MSELoss()
         KLD = - 0.5 * torch.sum(1 + log_var - mean.pow(2) - log_var.exp())
-        if loss_type == "default":
+        if loss_type["name"] == "default":
             reproduction_loss = MSE(x_hat, x)
             return reproduction_loss + KLD
-        elif loss_type == "vgg":
+        elif loss_type["name"] == "vgg":
             vgg = models.vgg19(weights=models.VGG19_Weights.IMAGENET1K_V1).features[:16].to(self.device)
+            perceptual_loss_weight = loss_type["args"]["loss_weight"]
             reproduction_loss = MSE(vgg(x_hat), vgg(x))
-            return reproduction_loss + KLD
+            return perceptual_loss_weight*reproduction_loss + KLD
 
     def train_step(self):
         for epoch in range(self.epoch):

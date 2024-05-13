@@ -75,7 +75,12 @@
                 "args": {}
             }
         ],
-        "which_loss": "default",
+        "which_loss": {
+            "name": "default",
+            "args": {
+                "loss_weight": null
+            }
+        },
         "which_metrics": []
     },
     "train": {
