@@ -1,0 +1,94 @@
+{
+    "name": "deault",
+    "batch": 16,
+    "device": "cuda",
+    "n_epoch": 20,
+    "lr": 1e-3,
+    "datasets": {
+        "train": {
+            "which_dataset": {
+                "name": [
+                    "data.dataset",
+                    "Sen2_MTC_New_Multi"
+                ],
+                "args": {
+                    "data_root": "/home/geo/Desktop/datasets/CTGAN/CTGAN/Sen2_MTC/dataset",
+                    "mode": "train"
+                }
+            },
+            "dataloader": {
+                "args": {
+                    "batch_size": 8,
+                    "num_workers": 8,
+                    "shuffle": true,
+                    "pin_memory": true,
+                    "drop_last": true
+                },
+                "val_args": {
+                    "batch_size": 1,
+                    "num_workers": 4,
+                    "shuffle": false,
+                    "pin_memory": true,
+                    "drop_last": false
+                }
+            }
+        },
+        "val": {
+            "which_dataset": {
+                "name": "Sen2_MTC_New_Multi",
+                "args": {
+                    "data_root": "",
+                    "mode": "val"
+                }
+            }
+        },
+        "test": {
+            "which_dataset": {
+                "name": "Sen2_MTC_New_Multi",
+                "args": {
+                    "data_root": "",
+                    "mode": "test"
+                }
+            },
+            "dataloader": {
+                "args": {
+                    "batch_size": 1,
+                    "num_workers": 4
+                }
+            }
+        }
+    },
+    "model": {
+        "which_model": {
+            "name": [
+                "models.sensar",
+                "SenSar"
+            ],
+            "args": {}
+        },
+        "which_networks": [
+            {
+                "name": [
+                    "models.network",
+                    "VAE"
+                ],
+                "args": {}
+            }
+        ],
+        "which_loss": {
+            "name": "default",
+            "args": {
+                "loss_weight": 0.5
+            }
+        },
+        "which_metrics": []
+    },
+    "train": {
+        "model_path": "saved_models/",
+        "model_name": "saved_model_sen_loss.pt"
+    },
+    "test": {
+        "model_path": "saved_models/",
+        "model_name": "saved_model_sen_loss.pt"
+    }
+}
