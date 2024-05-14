@@ -14,7 +14,7 @@ from torch.utils.data import Dataset
 
 # s2cloudless: see https://github.com/sentinel-hub/sentinel2-cloud-detector
 from s2cloudless import S2PixelCloudDetector
-from detect_cloudshadow import get_cloud_mask, get_shadow_mask
+from .detect_cloudshadow import get_cloud_mask, get_shadow_mask
 
 
 # utility functions used in the dataloaders of SEN12MS-CR and SEN12MS-CR-TS
