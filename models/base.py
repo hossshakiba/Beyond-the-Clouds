@@ -9,14 +9,14 @@ class BaseModel():
         """ init model with basic input, which are from __init__(**kwargs) function in inherited class """
         self.config = config
         self.phase = config['phase']
-        self.device = config['device']
-        self.batch_size = self.config['datasets'][self.phase]['dataloader']['args']['batch_size']
-        self.epoch = config['n_epoch']
-        self.lr = config['lr']
+        self.device = config[self.phase]['device']
+        self.batch_size = config[self.phase]['dataloader']['batch_size']
+        self.epoch = config['train']['n_epoch']
+        self.lr = config['train']['lr']
         self.dataloader = dataloader
         self.model_path = config[self.phase]['model_path']
         self.model_name = config[self.phase]['model_name']
-        self.loss_func = config['model']['which_loss']
+        self.loss_func = config['model']['loss']
         # self.metrics = metrics
         # self.schedulers = []
         # self.optimizers = []

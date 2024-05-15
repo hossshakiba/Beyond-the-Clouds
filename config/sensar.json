@@ -1,65 +1,14 @@
 {
     "name": "sensar",
-    "batch": 16,
-    "device": "cuda",
-    "n_epoch": 20,
-    "lr": 1e-3,
-    "datasets": {
-        "train": {
-            "which_dataset": {
-                "name": [
-                    "data.SEN12MSCRTS.dataset",
-                    "SEN12MSCRTS"
-                ],
-                "args": {
-                    "root": "/home/geo/Desktop/datasets/asiaWest",
-                    "split": "train",
-                    "n_input_samples": 3,
-                    "region": "asiaWest",
-                    "sample_type" : "cloudy_cloudfree"
-                }
-            },
-            "dataloader": {
-                "args": {
-                    "batch_size": 8,
-                    "shuffle": "True"
-                }
-            }
-        },
-        "val": {
-            "which_dataset": {
-                "name": "Sen2_MTC_New_Multi",
-                "args": {
-                    "data_root": "",
-                    "mode": "val"
-                }
-            }
-        },
-        "test": {
-            "which_dataset": {
-                "name": "Sen2_MTC_New_Multi",
-                "args": {
-                    "data_root": "",
-                    "mode": "test"
-                }
-            },
-            "dataloader": {
-                "args": {
-                    "batch_size": 1,
-                    "num_workers": 4
-                }
-            }
-        }
-    },
     "model": {
-        "which_model": {
+        "model": {
             "name": [
                 "models.sensar",
                 "SenSar"
             ],
             "args": {}
         },
-        "which_networks": [
+        "networks": [
             {
                 "name": [
                     "models.network",
@@ -68,20 +17,62 @@
                 "args": {}
             }
         ],
-        "which_loss": {
+        "loss": {
             "name": "default",
             "args": {
                 "loss_weight": 0.5
             }
         },
-        "which_metrics": []
+        "metrics": []
     },
     "train": {
-        "model_path": "saved_models/",
+        "device": "cuda",
+        "n_epoch": 20,
+        "lr": 1e-3,
+        "dataset": {
+            "name": [
+                "data.SEN12MSCRTS.dataset",
+                "SEN12MSCRTS"
+            ],
+            "args": {
+                "root": "/home/geo/Desktop/datasets/asiaWest",
+                "split": "train",
+                "n_input_samples": 3,
+                "region": "asiaWest",
+                "sample_type": "cloudy_cloudfree"
+            }
+        },
+        "dataloader": {
+            "args": {
+                "batch_size": 16,
+                "shuffle": "False"
+            }
+        },
+        "model_path": "saved_model_sen_loss/",
         "model_name": "saved_model_sen_loss.pt"
     },
     "test": {
-        "model_path": "saved_models/",
+        "device": "cuda",
+        "dataset": {
+            "name": [
+                "data.SEN12MSCRTS.dataset",
+                "SEN12MSCRTS"
+            ],
+            "args": {
+                "root": "/home/geo/Desktop/datasets/asiaWest",
+                "split": "test",
+                "n_input_samples": 3,
+                "region": "asiaWest",
+                "sample_type": "cloudy_cloudfree"
+            }
+        },
+        "dataloader": {
+            "args": {
+                "batch_size": 16,
+                "shuffle": "False"
+            }
+        },
+        "model_path": "saved_model_sen_loss/",
         "model_name": "saved_model_sen_loss.pt"
     }
 }

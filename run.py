@@ -7,16 +7,17 @@ from utils.reproducibility import set_seed_and_cudnn
 def main(config):
     set_seed_and_cudnn()
 
-    dataset = define_dataset(config['datasets']['train']['which_dataset'])
-    dataloader = define_dataloader(dataset, config['datasets']['train']['dataloader']['args'])
-    network = define_network(config['model']['which_networks'][0])
+    phase = config['phase']
+    dataset = define_dataset(config[phase]['dataset'])
+    dataloader = define_dataloader(dataset, config[phase]['dataloader']['args'])
+    network = define_network(config['model']['networks'][0])
 
     model = create_model(config=config,
                          network=network,
                          dataloader=dataloader
                         )
 
-    if config['phase'] == 'train':
+    if phase == 'train':
         model.train()
     else:
         model.test()

@@ -1,53 +1,5 @@
 {
     "name": "deault",
-    "batch": 16,
-    "device": "cuda",
-    "n_epoch": 20,
-    "lr": 1e-3,
-    "datasets": {
-        "train": {
-            "which_dataset": {
-                "name": [
-                    "data.Sen2_MTC.dataset",
-                    "Sen2_MTC"
-                ],
-                "args": {
-                    "root": "/home/geo/Desktop/datasets/CTGAN/CTGAN/Sen2_MTC/dataset",
-                    "mode": "train"
-                }
-            },
-            "dataloader": {
-                    "args": {
-                        "batch_size": 8,
-                        "shuffle": "True"
-                    }
-            }
-        },
-        "val": {
-            "which_dataset": {
-                "name": "Sen2_MTC_New_Multi",
-                "args": {
-                    "data_root": "",
-                    "mode": "val"
-                }
-            }
-        },
-        "test": {
-            "which_dataset": {
-                "name": "Sen2_MTC_New_Multi",
-                "args": {
-                    "data_root": "",
-                    "mode": "test"
-                }
-            },
-            "dataloader": {
-                "args": {
-                    "batch_size": 1,
-                    "num_workers": 4
-                }
-            }
-        }
-    },
     "model": {
         "which_model": {
             "name": [
@@ -56,7 +8,7 @@
             ],
             "args": {}
         },
-        "which_networks": [
+        "networks": [
             {
                 "name": [
                     "models.network",
@@ -65,19 +17,55 @@
                 "args": {}
             }
         ],
-        "which_loss": {
+        "loss": {
             "name": "default",
             "args": {
                 "loss_weight": null
             }
         },
-        "which_metrics": []
+        "metrics": []
     },
     "train": {
+        "device": "cuda",
+        "n_epoch": 20,
+        "lr": 1e-3,
+        "dataset": {
+            "name": [
+                "data.Sen2_MTC.dataset",
+                "Sen2_MTC"
+            ],
+            "args": {
+                "root": "/home/geo/Desktop/datasets/CTGAN/CTGAN/Sen2_MTC/dataset",
+                "mode": "train"
+            }
+        },
+        "dataloader": {
+            "args": {
+                "batch_size": 8,
+                "shuffle": "False"
+            }
+        },
         "model_path": "saved_models/",
         "model_name": "saved_model2.pt"
     },
     "test": {
+        "device": "cuda",
+        "dataset": {
+            "name": [
+                "data.Sen2_MTC.dataset",
+                "Sen2_MTC"
+            ],
+            "args": {
+                "root": "/home/geo/Desktop/datasets/CTGAN/CTGAN/Sen2_MTC/dataset",
+                "mode": "test"
+            }
+        },
+        "dataloader": {
+            "args": {
+                "batch_size": 16,
+                "shuffle": "False"
+            }
+        },
         "model_path": "saved_models/",
         "model_name": "saved_model2.pt"
     }
