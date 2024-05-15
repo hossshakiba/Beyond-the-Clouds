@@ -1,5 +1,5 @@
 {
-    "name": "deault",
+    "name": "sensar",
     "batch": 16,
     "device": "cuda",
     "n_epoch": 20,
@@ -8,28 +8,21 @@
         "train": {
             "which_dataset": {
                 "name": [
-                    "data.dataset",
-                    "Sen2_MTC_New_Multi"
+                    "data.SEN12MSCRTS.dataset",
+                    "SEN12MSCRTS"
                 ],
                 "args": {
-                    "data_root": "/home/geo/Desktop/datasets/CTGAN/CTGAN/Sen2_MTC/dataset",
-                    "mode": "train"
+                    "root": "/home/geo/Desktop/datasets/asiaWest",
+                    "split": "train",
+                    "n_input_samples": 3,
+                    "region": "asiaWest",
+                    "sample_type" : "cloudy_cloudfree"
                 }
             },
             "dataloader": {
                 "args": {
                     "batch_size": 8,
-                    "num_workers": 8,
-                    "shuffle": true,
-                    "pin_memory": true,
-                    "drop_last": true
-                },
-                "val_args": {
-                    "batch_size": 1,
-                    "num_workers": 4,
-                    "shuffle": false,
-                    "pin_memory": true,
-                    "drop_last": false
+                    "shuffle": "True"
                 }
             }
         },

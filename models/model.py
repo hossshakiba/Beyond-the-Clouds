@@ -76,13 +76,13 @@ class Model(BaseModel):
         dataloader_iter = tqdm(enumerate(self.dataloader), desc=f'Testing...', total=len(self.dataloader))
         for _, test_data in dataloader_iter:
             self.set_input(test_data)
-            x_hat, mean, log_var = self.network(self.cloudy_images[1])
+            x_hat, mean, log_var = self.network(self.cloudy_images[0])
             loss = self.loss_function(x_hat, self.cloud_free, mean, log_var)
 
             test_loss += loss.item()
             psnr.update(x_hat, self.cloud_free)
 
-            for output_image, cloudy_image, cloud_free in zip(x_hat, self.cloudy_images[1], self.cloud_free):
+            for output_image, cloudy_image, cloud_free in zip(x_hat, self.cloudy_images[0], self.cloud_free):
                 output_image = get_rgb(output_image)
                 output_image = Image.fromarray(output_image)
                 cloudy_image = get_rgb(cloudy_image)

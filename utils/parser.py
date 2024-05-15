@@ -4,6 +4,8 @@ from functools import partial
 from types import FunctionType
 from collections import OrderedDict
 
+from torch.utils.data import DataLoader
+
 
 class NoneDict(dict):
     def __missing__(self, key):
@@ -77,7 +79,8 @@ def create_model(**cfg_model):
 
     model_config = config['model']['which_model']
     model_config['args'].update(cfg_model)
-    model = init_obj(model_config, default_file_name='models.model', init_type='Model')
+    model = init_obj(
+        model_config, default_file_name='models.model', init_type='Model')
 
     return model
 
@@ -85,3 +88,17 @@ def create_model(**cfg_model):
 def define_network(network_config):
     """ Creates and initializes a network based on the provided configuration. """
     return init_obj(network_config, default_file_name='models.network', init_type='Network')
+
+
+def define_dataset(dataset_config):
+    """ Creates and initializes a dataset based on the provided configuration. """
+    return init_obj(dataset_config, default_file_name='data', init_type='Dataset')
+
+
+def define_dataloader(dataset, dataloader_config):
+    """ Creates and initializes a dataloader based on the provided configuration. """
+    dataloader = DataLoader(dataset,
+                            batch_size=dataloader_config['batch_size'],
+                            shuffle=dataloader_config['shuffle'],
+                            num_workers=4)
+    return dataloader

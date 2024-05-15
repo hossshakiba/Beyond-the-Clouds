@@ -8,29 +8,19 @@
         "train": {
             "which_dataset": {
                 "name": [
-                    "data.dataset",
-                    "Sen2_MTC_New_Multi"
+                    "data.Sen2_MTC.dataset",
+                    "Sen2_MTC"
                 ],
                 "args": {
-                    "data_root": "/home/geo/Desktop/datasets/CTGAN/CTGAN/Sen2_MTC/dataset",
+                    "root": "/home/geo/Desktop/datasets/CTGAN/CTGAN/Sen2_MTC/dataset",
                     "mode": "train"
                 }
             },
             "dataloader": {
-                "args": {
-                    "batch_size": 8,
-                    "num_workers": 8,
-                    "shuffle": true,
-                    "pin_memory": true,
-                    "drop_last": true
-                },
-                "val_args": {
-                    "batch_size": 1,
-                    "num_workers": 4,
-                    "shuffle": false,
-                    "pin_memory": true,
-                    "drop_last": false
-                }
+                    "args": {
+                        "batch_size": 8,
+                        "shuffle": "True"
+                    }
             }
         },
         "val": {

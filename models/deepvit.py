@@ -4,8 +4,6 @@ from torch import nn, einsum
 from einops import rearrange, repeat
 from einops.layers.torch import Rearrange
 
-from .kan.KAN import KAN
-
 
 class FeedForward(nn.Module):
     def __init__(self, dim, hidden_dim, dropout=0.):
@@ -129,9 +127,6 @@ class DeepViT(nn.Module):
         self.log_var = nn.Linear(num_classes,
                                  num_dim)
 
-        self.kan_head = KAN(width=[dim, num_classes],
-                            grid=100, k=3, device='cpu')
-
     def forward(self, img):
         x = self.to_patch_embedding(img)
         b, n, _ = x.shape
@@ -146,8 +141,7 @@ class DeepViT(nn.Module):
         x = x.mean(dim=1) if self.pool == 'mean' else x[:, 0]
 
         x = self.to_latent(x)
-        # x = self.mlp_head(x)
-        x = self.kan_head(x)
+        x = self.mlp_head(x)
 
         mu = self.mu(x)  # take only mu_tokens
         log_var = self.log_var(x)  # take only log_var_tokens

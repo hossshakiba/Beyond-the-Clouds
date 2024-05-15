@@ -1,15 +1,14 @@
 import argparse
 
-from data.utils import get_data
-from utils.parser import create_model, define_network, parse
+from utils.parser import create_model, define_dataloader, define_network, define_dataset, parse
 from utils.reproducibility import set_seed_and_cudnn
 
 
 def main(config):
     set_seed_and_cudnn()
 
-    dataset_path = config['datasets']['train']['which_dataset']['args']['data_root']
-    dataloader = get_data(dataset_path, config['batch'], config['phase'])
+    dataset = define_dataset(config['datasets']['train']['which_dataset'])
+    dataloader = define_dataloader(dataset, config['datasets']['train']['dataloader']['args'])
     network = define_network(config['model']['which_networks'][0])
 
     model = create_model(config=config,
