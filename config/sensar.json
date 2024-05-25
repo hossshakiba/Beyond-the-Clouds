@@ -39,7 +39,8 @@
                 "split": "train",
                 "n_input_samples": 3,
                 "region": "asiaWest",
-                "sample_type": "cloudy_cloudfree"
+                "sample_type": "cloudy_cloudfree",
+                "cloud_masks": "cloud_cloudshadow_mask"
             }
         },
         "dataloader": {

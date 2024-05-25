@@ -10,7 +10,7 @@ class BaseModel():
         self.config = config
         self.phase = config['phase']
         self.device = config[self.phase]['device']
-        self.batch_size = config[self.phase]['dataloader']['batch_size']
+        self.batch_size = config[self.phase]['dataloader']["args"]['batch_size']
         self.epoch = config['train']['n_epoch']
         self.lr = config['train']['lr']
         self.dataloader = dataloader
