@@ -1,0 +1,80 @@
+{
+    "name": "simpleViT_SEN12MSCRTS",
+    "model": {
+        "which_model": {
+            "name": [
+                "models.mono_temporal_mono_modal_sen12mscrts",
+                "MonoTemporalMonoModal"
+            ],
+            "args": {}
+        },
+        "networks": [
+            {
+                "name": [
+                    "models.network",
+                    "VAE"
+                ],
+                "args": {}
+            }
+        ],
+        "loss": {
+            "name": "default",
+            "args": {
+                "loss_weight": null
+            }
+        },
+        "metrics": []
+    },
+    "train": {
+        "device": "cuda",
+        "n_epoch": 5,
+        "lr": 1e-3,
+        "dataset": {
+            "name": [
+                "data.SEN12MSCRTS.dataset",
+                "SEN12MSCRTS"
+            ],
+            "args": {
+                "root": "/home/geo/Desktop/datasets/asiaWest",
+                "split": "train",
+                "n_input_samples": 3,
+                "region": "asiaWest",
+                "sample_type": "cloudy_cloudfree",
+                "cloud_masks": "cloud_cloudshadow_mask"
+            }
+        },
+        "dataloader": {
+            "args": {
+                "batch_size": 16,
+                "shuffle": "False"
+            }
+        },
+        "model_path": "saved_models/",
+        "model_name": "simpleViT_SEN12MSCRTS.pt"
+    },
+    "test": {
+        "device": "cuda",
+        "dataset": {
+            "name": [
+                "data.SEN12MSCRTS.dataset",
+                "SEN12MSCRTS"
+            ],
+            "args": {
+                "root": "/home/geo/Desktop/datasets/asiaWest",
+                "split": "test",
+                "n_input_samples": 3,
+                "region": "asiaWest",
+                "sample_type": "cloudy_cloudfree",
+                "cloud_masks": "cloud_cloudshadow_mask"
+            }
+        },
+        "dataloader": {
+            "args": {
+                "batch_size": 16,
+                "shuffle": "False"
+            }
+        },
+        "model_path": "saved_models",
+        "model_name": "simpleViT_SEN12MSCRTS.pt"
+    }
+}
