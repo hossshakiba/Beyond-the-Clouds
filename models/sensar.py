@@ -87,7 +87,7 @@ class SenSar(BaseModel):
 
                 dataloader_iter.set_postfix({'loss': loss.item()})
 
-            print(f"Epoch {epoch + 1}, Average Loss: {overall_loss / (i*self.batch_size)}")
+            print(f"Epoch {epoch + 1}, Average Loss: {overall_loss / (i*self.batch_size):.5f}")
         self.save_model(self.network)
     
     def test_step(self):
@@ -136,4 +136,4 @@ class SenSar(BaseModel):
             test_loss = test_loss / len(self.dataloader)
             test_psnr = psnr.compute()
 
-        print(f"Loss: {test_loss}, PSNR: {test_psnr}")
+        print(f"Loss: {test_loss:.5f}, PSNR: {test_psnr:.5f}")
