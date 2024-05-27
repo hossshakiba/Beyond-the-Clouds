@@ -68,7 +68,7 @@ class SenSar(BaseModel):
         rgb = rgb.astype(np.uint8)
 
         return rgb
-
+    
     def train_step(self):
         for epoch in range(self.epoch):
             overall_loss = 0
@@ -77,8 +77,7 @@ class SenSar(BaseModel):
                 self.set_input(train_data)
 
                 self.optimizer.zero_grad()
-
-                x_hat, mean, log_var = self.network(self.cloudy_images)
+                x_hat, mean, log_var = self.network(self.cloudy_images, self.sar)
                 loss = self.loss_function(x_hat, self.cloud_free, mean, log_var, self.loss_func)
 
                 overall_loss += loss.item()
@@ -105,7 +104,7 @@ class SenSar(BaseModel):
         dataloader_iter = tqdm(enumerate(self.dataloader), desc=f'Testing...', total=len(self.dataloader))
         for _, test_data in dataloader_iter:
             self.set_input(test_data)
-            x_hat, mean, log_var = self.network(self.cloudy_images)
+            x_hat, mean, log_var = self.network(self.cloudy_images, self.sar)
             loss = self.loss_function(x_hat, self.cloud_free, mean, log_var, self.loss_func)
 
             test_loss += loss.item()

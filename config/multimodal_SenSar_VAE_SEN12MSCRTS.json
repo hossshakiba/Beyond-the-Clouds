@@ -1,5 +1,5 @@
 {
-    "name": "sensar",
+    "name": "multimodal_SenSar_VAE_SEN12MSCRTS",
     "model": {
         "which_model": {
             "name": [
@@ -11,7 +11,7 @@
         "networks": [
             {
                 "name": [
-                    "models.network",
+                    "models.network_multimodal",
                     "VAE"
                 ],
                 "args": {}
@@ -27,7 +27,7 @@
     },
     "train": {
         "device": "cuda",
-        "n_epoch": 20,
+        "n_epoch": 5,
         "lr": 1e-3,
         "dataset": {
             "name": [
@@ -50,7 +50,7 @@
             }
         },
         "model_path": "saved_models/",
-        "model_name": "saved_model_sen_loss.pt"
+        "model_name": "multimodal_SenSar_VAE_SEN12MSCRTS.pt"
     },
     "test": {
         "device": "cuda",
@@ -64,7 +64,8 @@
                 "split": "test",
                 "n_input_samples": 3,
                 "region": "asiaWest",
-                "sample_type": "cloudy_cloudfree"
+                "sample_type": "cloudy_cloudfree",
+                "cloud_masks": "cloud_cloudshadow_mask"
             }
         },
         "dataloader": {
@@ -74,6 +75,6 @@
             }
         },
         "model_path": "saved_models",
-        "model_name": "saved_model_sen_loss.pt"
+        "model_name": "multimodal_SenSar_VAE_SEN12MSCRTS.pt"
     }
 }
