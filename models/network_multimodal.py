@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torchvision.models import resnet50
 
-from models.deepvit import DeepViT
+from models.ViTs.deepvit import DeepViT
 
 
 

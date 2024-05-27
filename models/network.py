@@ -1,8 +1,8 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from models.ViT import VisualTransformer
-from models.deepvit import DeepViT
+from models.ViTs.ViT import VisualTransformer
+from models.ViTs.deepvit import DeepViT
 
 
 # --- Channel Attention (CA) Layer --- #
