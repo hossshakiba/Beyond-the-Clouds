@@ -77,7 +77,7 @@ class Model(BaseModel):
         for _, test_data in dataloader_iter:
             self.set_input(test_data)
             x_hat, mean, log_var = self.network(self.cloudy_images[0])
-            loss = self.loss_function(x_hat, self.cloud_free, mean, log_var)
+            loss = self.loss_function(x_hat, self.cloud_free, mean, log_var, self.loss_func)
 
             test_loss += loss.item()
             psnr.update(x_hat, self.cloud_free)
