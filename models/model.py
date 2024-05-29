@@ -41,6 +41,7 @@ class Model(BaseModel):
             return perceptual_loss_weight*reproduction_loss + KLD
 
     def train_step(self):
+        best_overall_loss = float('inf')
         for epoch in range(self.epoch):
             overall_loss = 0
             dataloader_iter = tqdm(enumerate(self.dataloader), desc=f'Training... Epoch: {epoch + 1}/{self.epoch}', total=len(self.dataloader))
@@ -49,7 +50,7 @@ class Model(BaseModel):
 
                 self.optimizer.zero_grad()
 
-                x_hat, mean, log_var = self.network(self.cloudy_images[1])
+                x_hat, mean, log_var = self.network(self.cloudy_images[0])
                 loss = self.loss_function(x_hat, self.cloud_free, mean, log_var, self.loss_func)
 
                 overall_loss += loss.item()
@@ -59,8 +60,12 @@ class Model(BaseModel):
 
                 dataloader_iter.set_postfix({'loss': loss.item()})
 
+            if overall_loss < best_overall_loss:
+                best_overall_loss = overall_loss
+                self.save_model(self.network)
+                
             print(f"Epoch {epoch + 1}, Average Loss: {overall_loss / (i*self.batch_size):.5f}")
-        self.save_model(self.network)
+
     
     def test_step(self):
         path = os.path.join(self.model_path, self.model_name)
